@@ -1,0 +1,24 @@
+package moe.crx.effect.database
+
+import org.jetbrains.exposed.dao.LongEntity
+import org.jetbrains.exposed.dao.LongEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.javatime.timestamp
+
+object TokensTable : LongIdTable() {
+    val userId = reference("user_id", UsersTable, ReferenceOption.CASCADE, ReferenceOption.CASCADE)
+    val creationDate = timestamp("creation_date")
+    val expireDate = timestamp("expire_date").nullable()
+    val accessToken = varchar("access_token", 100).uniqueIndex()
+}
+
+class TokenEntity(id: EntityID<Long>) : LongEntity(id) {
+    companion object : LongEntityClass<TokenEntity>(TokensTable)
+
+    var userId by UserEntity referencedOn TokensTable.userId
+    var creationDate by TokensTable.creationDate
+    var expireDate by TokensTable.expireDate
+    var accessToken by TokensTable.accessToken
+}
