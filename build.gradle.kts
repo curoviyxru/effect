@@ -1,6 +1,7 @@
 val logback_version: String by project
 val postgresql_version: String by project
 val exposed_version: String by project
+val kotlinx_datetime_version: String by project
 
 plugins {
     application
@@ -22,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     implementation("io.ktor:ktor-server-core-jvm")
@@ -30,6 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-status-pages")
+    implementation("io.ktor:ktor-server-rate-limit")
+    implementation("io.ktor:ktor-server-call-logging")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 
     implementation("org.postgresql:postgresql:$postgresql_version")
@@ -38,7 +42,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-crypt:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
 
     testImplementation(kotlin("test"))
 }
