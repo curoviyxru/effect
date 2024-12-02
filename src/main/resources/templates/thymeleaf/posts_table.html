@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts table</title>
+</head>
+<body>
+<h1>All posts</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Preview text</th>
+        <th>Full text</th>
+        <th>Image ID</th>
+        <th>Creation date</th>
+        <th>View count</th>
+        <th>Category</th>
+        <th>Last edit date</th>
+        <th colspan="2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" value="new"></td>
+            <td><input type="text" name="title"></td>
+            <td><input type="text" name="preview_text"></td>
+            <td><input type="text" name="full_text"></td>
+            <td><input type="text" name="image_id"></td>
+            <td><input type="text" name="creation_date"></td>
+            <td><input type="text" name="view_count"></td>
+            <td><input type="text" name="category"></td>
+            <td><input type="text" name="last_edit_date"></td>
+            <td><input type="submit" value="Create"></td>
+            <td></td>
+        </form>
+    </tr>
+    <tr th:each="post: ${posts}">
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" th:value="${post.id}"></td>
+            <td><input type="text" name="title" th:value="${post.title}"></td>
+            <td><input type="text" name="preview_text" th:value="${post.previewText}"></td>
+            <td><input type="text" name="full_text" th:value="${post.fullText}"></td>
+            <td><input type="text" name="image_id" th:value="${post.image != null} ? ${post.image.id}"></td>
+            <td><input type="text" name="creation_date" th:value="${post.creationDate}"></td>
+            <td><input type="text" name="view_count" th:value="${post.viewCount}"></td>
+            <td><input type="text" name="category" th:value="${post.category}"></td>
+            <td><input type="text" name="last_edit_date" th:value="${post.lastEditDate}"></td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <form method="post">
+            <td><input type="hidden" name="id" th:value="${post.id}"><input type="hidden" name="delete"
+                                                                            value="true"><input type="submit"
+                                                                                                value="Delete"></td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

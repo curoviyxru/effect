@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments table</title>
+</head>
+<body>
+<h1>All comments</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Text</th>
+        <th>Image ID</th>
+        <th>Post ID</th>
+        <th>Creation date</th>
+        <th>Last edit date</th>
+        <th colspan="2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" value="new"></td>
+            <td><input type="text" name="user_id"></td>
+            <td><input type="text" name="text"></td>
+            <td><input type="text" name="image_id"></td>
+            <td><input type="text" name="post_id"></td>
+            <td><input type="text" name="creation_date"></td>
+            <td><input type="text" name="last_edit_date"></td>
+            <td><input type="submit" value="Create"></td>
+            <td></td>
+        </form>
+    </tr>
+    <tr th:each="comment: ${comments}">
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" th:value="${comment.id}"></td>
+            <td><input type="text" name="user_id" th:value="${comment.user.id}"></td>
+            <td><input type="text" name="text" th:value="${comment.text}"></td>
+            <td><input type="text" name="image_id" th:value="${comment.image != null} ? ${comment.image.id}"></td>
+            <td><input type="text" name="post_id" th:value="${comment.post.id}"></td>
+            <td><input type="text" name="creation_date" th:value="${comment.creationDate}"></td>
+            <td><input type="text" name="last_edit_date" th:value="${comment.lastEditDate}"></td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <form method="post">
+            <td><input type="hidden" name="id" th:value="${comment.id}"><input type="hidden" name="delete"
+                                                                            value="true"><input type="submit"
+                                                                                                value="Delete"></td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

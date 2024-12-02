@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Images table</title>
+</head>
+<body>
+<h1>All images</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>URL</th>
+        <th>Width</th>
+        <th>Height</th>
+        <th>File size</th>
+        <th>Creation date</th>
+        <th colspan="2">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" value="new"></td>
+            <td><input type="text" name="url"></td>
+            <td><input type="text" name="width"></td>
+            <td><input type="text" name="height"></td>
+            <td><input type="text" name="file_size"></td>
+            <td><input type="text" name="creation_date"></td>
+            <td><input type="submit" value="Create"></td>
+            <td></td>
+        </form>
+    </tr>
+    <tr th:each="image: ${images}">
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="id" th:value="${image.id}"></td>
+            <td><input type="text" name="url" th:value="${image.url}"></td>
+            <td><input type="text" name="width" th:value="${image.width}"></td>
+            <td><input type="text" name="height" th:value="${image.height}"></td>
+            <td><input type="text" name="file_size" th:value="${image.fileSize}"></td>
+            <td><input type="text" name="creation_date" th:value="${image.creationDate}"></td>
+            <td><input type="submit" value="Update"></td>
+        </form>
+        <form method="post">
+            <td><input type="hidden" name="id" th:value="${image.id}"><input type="hidden" name="delete"
+                                                                            value="true"><input type="submit"
+                                                                                                value="Delete"></td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
