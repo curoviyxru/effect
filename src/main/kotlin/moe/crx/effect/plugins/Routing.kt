@@ -4,8 +4,9 @@ import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.routing.*
-import moe.crx.effect.models.DatabaseTokenRepository
-import moe.crx.effect.models.DatabaseUserRepository
+import moe.crx.effect.frontend.usersTable
+import moe.crx.effect.models.TokenRepository
+import moe.crx.effect.models.UserRepository
 import moe.crx.effect.routes.authRoutes
 import moe.crx.effect.routes.userRoutes
 
@@ -15,14 +16,23 @@ fun Application.configureRouting() {
     }
 }
 
-fun Application.configureApiRouting() {
-    val userRepository = DatabaseUserRepository()
-    val tokenRepository = DatabaseTokenRepository()
-
+fun Application.configureApiRouting(userRepository: UserRepository, tokenRepository: TokenRepository) {
     routing {
         rateLimit {
-            authRoutes(userRepository, tokenRepository)
-            userRoutes()
+            route("/api") {
+                authRoutes(userRepository, tokenRepository)
+                userRoutes()
+            }
+        }
+    }
+}
+
+fun Application.configureFrontendRouting(userRepository: UserRepository) {
+    routing {
+        rateLimit {
+            route("/tables") {
+                usersTable(userRepository)
+            }
         }
     }
 }

@@ -8,20 +8,20 @@ import moe.crx.effect.database.ImageEntity
 @Serializable
 data class Image(
     var id: Long,
-    var url: String,
-    var width: Int,
-    var height: Int,
+    var url: String = "",
+    var width: Int = 0,
+    var height: Int = 0,
     @SerialName("file_size")
-    var fileSize: Long,
+    var fileSize: Long = 0,
     @SerialName("creation_date")
-    var creationDate : Instant,
+    var creationDate : Instant = Instant.DISTANT_PAST,
 )
 
 fun ImageEntity.toModel() = Image(
-    id.value,
-    url,
-    width,
-    height,
-    fileSize,
-    creationDate
+    id = id.value,
+    url = url,
+    width = width,
+    height = height,
+    fileSize = fileSize,
+    creationDate = creationDate
 )

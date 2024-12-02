@@ -14,6 +14,7 @@ object CommentsTable : LongIdTable() {
     val imageId = reference("image_id", ImagesTable, SET_NULL, CASCADE).nullable()
     val postId = reference("post_id", PostsTable, CASCADE, CASCADE)
     val creationDate = timestamp("creation_date")
+    val lastEditDate = timestamp("last_edit_date").nullable()
 }
 
 class CommentEntity(id: EntityID<Long>) : LongEntity(id) {
@@ -24,4 +25,5 @@ class CommentEntity(id: EntityID<Long>) : LongEntity(id) {
     var image by ImageEntity optionalReferencedOn CommentsTable.imageId
     var post by PostEntity referencedOn CommentsTable.postId
     var creationDate by CommentsTable.creationDate
+    var lastEditDate by CommentsTable.lastEditDate
 }

@@ -22,9 +22,9 @@ data class Token(
 );
 
 fun TokenEntity.toModel() = Token(
-    user.toModel(),
-    expireDate,
-    accessToken
+    user = user.toModel(),
+    expireDate = expireDate,
+    accessToken = accessToken
 )
 
 interface TokenRepository {

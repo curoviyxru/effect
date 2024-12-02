@@ -7,10 +7,12 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
 import org.jetbrains.exposed.sql.ReferenceOption.SET_NULL
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.jetbrains.exposed.sql.not
+import org.jetbrains.exposed.sql.trim
 
 object UsersTable : LongIdTable() {
     val fullName = varchar("full_name", 100).nullable()
-    val username = varchar("username", 40).uniqueIndex()
+    val username = varchar("username", 40).check { not(it.trim().isNullOrEmpty()) }.uniqueIndex()
     val registerDate = timestamp("register_date")
     val about = varchar("about", 1_000).nullable()
     val imageId = reference("image_id", ImagesTable, SET_NULL, CASCADE).nullable()
