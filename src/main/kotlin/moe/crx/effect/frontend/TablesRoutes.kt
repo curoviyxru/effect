@@ -8,6 +8,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.post
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import moe.crx.effect.models.FeedRepository
 import moe.crx.effect.models.Image
 import moe.crx.effect.models.TokenRepository
 import moe.crx.effect.models.User
@@ -50,5 +51,12 @@ fun Route.tokensTable(tokenRepository: TokenRepository) {
     get("/tokens") {
         val tokens = tokenRepository.all()
         call.respond(ThymeleafContent("tokens_table", mapOf("tokens" to tokens)))
+    }
+}
+
+fun Route.feedsTable(feedRepository: FeedRepository) {
+    get("/feeds") {
+        val feeds = feedRepository.all()
+        call.respond(ThymeleafContent("feeds_table", mapOf("feeds" to feeds)))
     }
 }

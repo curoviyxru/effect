@@ -4,8 +4,10 @@ import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.routing.*
+import moe.crx.effect.frontend.feedsTable
 import moe.crx.effect.frontend.tokensTable
 import moe.crx.effect.frontend.usersTable
+import moe.crx.effect.models.FeedRepository
 import moe.crx.effect.models.TokenRepository
 import moe.crx.effect.models.UserRepository
 import moe.crx.effect.routes.authRoutes
@@ -28,12 +30,13 @@ fun Application.configureApiRouting(userRepository: UserRepository, tokenReposit
     }
 }
 
-fun Application.configureFrontendRouting(userRepository: UserRepository, tokenRepository: TokenRepository) {
+fun Application.configureFrontendRouting(userRepository: UserRepository, tokenRepository: TokenRepository, feedRepository: FeedRepository) {
     routing {
         rateLimit {
             route("/tables") {
                 usersTable(userRepository)
                 tokensTable(tokenRepository)
+                feedsTable(feedRepository)
             }
         }
     }

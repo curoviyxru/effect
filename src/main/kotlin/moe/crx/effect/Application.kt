@@ -3,6 +3,7 @@ package moe.crx.effect
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import moe.crx.effect.models.DatabaseFeedRepository
 import moe.crx.effect.models.DatabaseTokenRepository
 import moe.crx.effect.models.DatabaseUserRepository
 import moe.crx.effect.plugins.configureApiRouting
@@ -23,6 +24,7 @@ fun main() {
 fun Application.module() {
     val userRepository = DatabaseUserRepository()
     val tokenRepository = DatabaseTokenRepository()
+    val feedRepository = DatabaseFeedRepository()
 
     configureDatabases()
     configureSerialization()
@@ -32,5 +34,5 @@ fun Application.module() {
     configureTemplating()
     configureRouting()
     configureApiRouting(userRepository, tokenRepository)
-    configureFrontendRouting(userRepository, tokenRepository)
+    configureFrontendRouting(userRepository, tokenRepository, feedRepository)
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Feeds table</title>
+</head>
+<body>
+<h1>All feeds</h1>
+<table>
+    <thead>
+    <tr>
+        <th>User ID</th>
+        <th>Post ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="feed: ${feeds}">
+        <form method="post">
+            <td><input type="text" readonly="readonly" name="user_id" th:value="${feed.user.id}"></td>
+            <td><input type="text" readonly="readonly" name="post_id" th:value="${feed.post.id}"></td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
