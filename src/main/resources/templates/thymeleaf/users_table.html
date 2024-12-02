@@ -12,7 +12,7 @@
         <th>ID</th>
         <th>Full name</th>
         <th>Username</th>
-        <th>Register date</th>
+        <th>Creation date</th>
         <th>About</th>
         <th>Image ID</th>
         <th colspan="2">Actions</th>
@@ -24,7 +24,7 @@
             <td><input type="text" readonly="readonly" name="id" value="new"></td>
             <td><input type="text" name="full_name"></td>
             <td><input type="text" name="username"></td>
-            <td><input type="text" name="register_date"></td>
+            <td><input type="text" name="creation_date"></td>
             <td><input type="text" name="about"></td>
             <td><input type="text" name="image_id"></td>
             <td><input type="submit" value="Create"></td>
@@ -36,7 +36,7 @@
             <td><input type="text" readonly="readonly" name="id" th:value="${user.id}"></td>
             <td><input type="text" name="full_name" th:value="${user.fullName}"></td>
             <td><input type="text" name="username" th:value="${user.username}"></td>
-            <td><input type="text" name="register_date" th:value="${user.registerDate}"></td>
+            <td><input type="text" name="creation_date" th:value="${user.creationDate}"></td>
             <td><input type="text" name="about" th:value="${user.about}"></td>
             <td><input type="text" name="image_id" th:value="${user.image != null} ? ${user.image.id}"></td>
             <td><input type="submit" value="Update"></td>

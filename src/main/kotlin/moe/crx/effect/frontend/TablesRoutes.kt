@@ -32,7 +32,7 @@ fun Route.usersTable(userRepository: UserRepository) {
             id = id ?: 0,
             fullName = form["full_name"],
             username = form["username"] ?: "",
-            registerDate = form["register_date"]
+            creationDate = form["creation_date"]
                 .runCatching { Instant.parse(this ?: "") }
                 .getOrDefault(Clock.System.now()),
             about = form["about"],

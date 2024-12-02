@@ -16,8 +16,8 @@ data class User(
     @SerialName("full_name")
     var fullName: String? = null,
     var username: String = "",
-    @SerialName("register_date")
-    var registerDate: Instant = Clock.System.now(),
+    @SerialName("creation_date")
+    var creationDate: Instant = Clock.System.now(),
     var about: String? = null,
     var image: Image? = null,
 )
@@ -26,7 +26,7 @@ fun UserEntity.toModel() = User(
     id = id.value,
     fullName = fullName,
     username = username,
-    registerDate = registerDate,
+    creationDate = creationDate,
     about = about,
     image = image?.toModel()
 )
@@ -57,7 +57,7 @@ class DatabaseUserRepository : UserRepository {
                 .findByIdAndUpdate(value.id) {
                     it.fullName = value.fullName
                     it.username = value.username
-                    it.registerDate = value.registerDate
+                    it.creationDate = value.creationDate
                     it.about = value.about
                     it.image = value.image?.run { ImageEntity[id] }
                     if (password != null) it.passwordHash = hashPassword(value.username, password)
@@ -76,7 +76,7 @@ class DatabaseUserRepository : UserRepository {
                 .new {
                     fullName = value.fullName
                     username = value.username
-                    registerDate = value.registerDate
+                    creationDate = value.creationDate
                     about = value.about
                     image = value.image?.run { ImageEntity[id] }
                     passwordHash = if (password != null) hashPassword(value.username, password) else ""
