@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object ImagesTable : LongIdTable() {
+object ImagesTable : LongIdTable("images") {
     val url = varchar("url", 500)
     val width = integer("width")
     val height = integer("height")

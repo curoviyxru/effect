@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
 import org.jetbrains.exposed.sql.ReferenceOption.SET_NULL
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object PostsTable : LongIdTable() {
+object PostsTable : LongIdTable("posts") {
     val title = varchar("title", 200)
     val previewText = varchar("preview_text", 1_000).nullable()
     val fullText = varchar("full_text", 2_000_000)

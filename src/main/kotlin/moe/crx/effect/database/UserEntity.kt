@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.not
 import org.jetbrains.exposed.sql.trim
 
-object UsersTable : LongIdTable() {
+object UsersTable : LongIdTable("users") {
     val fullName = varchar("full_name", 100).nullable()
     val username = varchar("username", 40).check { not(it.trim().isNullOrEmpty()) }.uniqueIndex()
     val creationDate = timestamp("creation_date")

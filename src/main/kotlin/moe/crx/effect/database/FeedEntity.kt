@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.CompositeIdTable
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
 
-object FeedsTable : CompositeIdTable() {
+object FeedsTable : CompositeIdTable("feeds") {
     val userId = reference("user_id", UsersTable, CASCADE, CASCADE)
     val postId = reference("post_id", PostsTable, CASCADE, CASCADE)
 

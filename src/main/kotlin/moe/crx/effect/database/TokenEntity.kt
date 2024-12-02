@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object TokensTable : LongIdTable() {
+object TokensTable : LongIdTable("tokens") {
     val userId = reference("user_id", UsersTable, CASCADE, CASCADE)
     val creationDate = timestamp("creation_date")
     val expireDate = timestamp("expire_date").nullable()

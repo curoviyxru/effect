@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.ReferenceOption.CASCADE
 import org.jetbrains.exposed.sql.ReferenceOption.SET_NULL
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
-object CommentsTable : LongIdTable() {
+object CommentsTable : LongIdTable("comments") {
     val userId = reference("user_id", UsersTable, CASCADE, CASCADE)
     val text = varchar("text", 4_000).nullable()
     val imageId = reference("image_id", ImagesTable, SET_NULL, CASCADE).nullable()
