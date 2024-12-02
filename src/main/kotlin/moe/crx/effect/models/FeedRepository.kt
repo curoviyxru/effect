@@ -6,8 +6,8 @@ import moe.crx.effect.utils.suspendTransaction
 
 @Serializable
 data class Feed(
-    var user: User,
-    var post: Post,
+    var user: User = User(),
+    var post: Post = Post(),
 )
 
 fun FeedEntity.toModel() = Feed(
@@ -15,9 +15,7 @@ fun FeedEntity.toModel() = Feed(
     post = post.toModel()
 )
 
-interface FeedRepository {
-    suspend fun all(): List<Feed>
-}
+interface FeedRepository : BaseReadOnlyRepository<Feed>
 
 class DatabaseFeedRepository : FeedRepository {
     override suspend fun all(): List<Feed> {

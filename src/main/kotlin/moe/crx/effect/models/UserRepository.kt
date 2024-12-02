@@ -12,14 +12,14 @@ import moe.crx.effect.utils.suspendTransaction
 
 @Serializable
 data class User(
-    var id: Long,
+    var id: Long = 0,
     @SerialName("full_name")
-    var fullName: String?,
-    var username: String,
+    var fullName: String? = null,
+    var username: String = "",
     @SerialName("register_date")
-    var registerDate: Instant,
-    var about: String?,
-    var image: Image?,
+    var registerDate: Instant = Clock.System.now(),
+    var about: String? = null,
+    var image: Image? = null,
 )
 
 fun UserEntity.toModel() = User(
@@ -31,42 +31,13 @@ fun UserEntity.toModel() = User(
     image = image?.toModel()
 )
 
-interface UserRepository {
+interface UserRepository : BaseRepository<User> {
+    suspend fun create(value: User, password: String?): User
+    suspend fun update(value: User, password: String?): User?
     suspend fun getByUsername(username: String): User?
-    suspend fun register(username: String, password: String): User
-    suspend fun all(): List<User>
-    suspend fun update(user: User): User?
-    suspend fun create(user: User, password: String? = null): User
-    suspend fun delete(id: Long): User?
 }
 
 class DatabaseUserRepository : UserRepository {
-    override suspend fun getByUsername(username: String): User? {
-        return suspendTransaction {
-            UserEntity
-                .find { UsersTable.username eq username }
-                .limit(1)
-                .map(UserEntity::toModel)
-                .firstOrNull()
-        }
-    }
-
-    override suspend fun register(username: String, password: String): User {
-        if (getByUsername(username) != null) {
-            throw IllegalArgumentException("username already registered")
-        }
-
-        return suspendTransaction {
-            UserEntity
-                .new {
-                    this.username = username
-                    registerDate = Clock.System.now()
-                    passwordHash = hashPassword(username, password)
-                }
-                .toModel()
-        }
-    }
-
     override suspend fun all(): List<User> {
         return suspendTransaction {
             UserEntity
@@ -76,45 +47,64 @@ class DatabaseUserRepository : UserRepository {
         }
     }
 
-    override suspend fun update(user: User): User? {
+    override suspend fun update(value: User): User? {
+        return update(value, null)
+    }
+
+    override suspend fun update(value: User, password: String?): User? {
         return suspendTransaction {
             UserEntity
-                .findByIdAndUpdate(user.id) {
-                    it.fullName = user.fullName
-                    it.username = user.username
-                    it.registerDate = user.registerDate
-                    it.about = user.about
-                    it.image = user.image?.let { ImageEntity[it.id] }
+                .findByIdAndUpdate(value.id) {
+                    it.fullName = value.fullName
+                    it.username = value.username
+                    it.registerDate = value.registerDate
+                    it.about = value.about
+                    it.image = value.image?.run { ImageEntity[id] }
+                    if (password != null) it.passwordHash = hashPassword(value.username, password)
                 }
                 ?.toModel()
         }
     }
 
-    override suspend fun create(user: User, password: String?): User {
+    override suspend fun create(value: User): User {
+        return create(value, null)
+    }
+
+    override suspend fun create(value: User, password: String?): User {
         return suspendTransaction {
             UserEntity
                 .new {
-                    fullName = user.fullName
-                    username = user.username
-                    registerDate = user.registerDate
-                    about = user.about
-                    image = user.image?.let { ImageEntity[it.id] }
-                    passwordHash = hashPassword(user.username, password ?: user.username)
+                    fullName = value.fullName
+                    username = value.username
+                    registerDate = value.registerDate
+                    about = value.about
+                    image = value.image?.run { ImageEntity[id] }
+                    passwordHash = if (password != null) hashPassword(value.username, password) else ""
                 }
                 .toModel()
         }
     }
 
     override suspend fun delete(id: Long): User? {
-        var user: User? = null
+        var value: User? = null
 
         suspendTransaction {
             UserEntity
                 .findById(id)
-                .also { user = it?.toModel() }
+                .also { value = it?.toModel() }
                 ?.delete()
         }
 
-        return user
+        return value
+    }
+
+    override suspend fun getByUsername(username: String): User? {
+        return suspendTransaction {
+            UserEntity
+                .find { UsersTable.username eq username }
+                .limit(1)
+                .map(UserEntity::toModel)
+                .firstOrNull()
+        }
     }
 }

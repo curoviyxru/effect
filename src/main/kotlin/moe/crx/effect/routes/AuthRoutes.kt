@@ -9,6 +9,7 @@ import moe.crx.effect.models.TokenRepository
 import moe.crx.effect.models.UserRepository
 import java.lang.IllegalArgumentException
 import io.ktor.server.response.respond
+import moe.crx.effect.models.User
 
 fun Route.authRegister(userRepository: UserRepository) {
     get("/register") {
@@ -23,7 +24,7 @@ fun Route.authRegister(userRepository: UserRepository) {
             throw IllegalArgumentException("password is null")
         }
 
-        val registeredUser = userRepository.register(username, password)
+        val registeredUser = userRepository.create(User(username = username), password)
 
         call.respond(registeredUser)
     }

@@ -14,11 +14,11 @@ import moe.crx.effect.utils.suspendTransaction
 @Serializable
 data class Token(
     @SerialName("user")
-    var user: User,
+    var user: User = User(),
     @SerialName("expire_date")
-    var expireDate: Instant?,
+    var expireDate: Instant? = null,
     @SerialName("access_token")
-    var accessToken: String,
+    var accessToken: String = "",
 )
 
 fun TokenEntity.toModel() = Token(
@@ -27,12 +27,20 @@ fun TokenEntity.toModel() = Token(
     accessToken = accessToken
 )
 
-interface TokenRepository {
+interface TokenRepository : BaseReadOnlyRepository<Token> {
     suspend fun authorize(username: String, password: String, expireDate: Instant? = null): Token
-    suspend fun all(): List<Token>
 }
 
 class DatabaseTokenRepository : TokenRepository {
+    override suspend fun all(): List<Token> {
+        return suspendTransaction {
+            TokenEntity
+                .all()
+                .map(TokenEntity::toModel)
+                .toList()
+        }
+    }
+
     override suspend fun authorize(username: String, password: String, expireDate: Instant?): Token {
         val user = suspendTransaction {
             UserEntity
@@ -58,15 +66,6 @@ class DatabaseTokenRepository : TokenRepository {
                     accessToken = generateToken(user.id.value)
                 }
                 .toModel()
-        }
-    }
-
-    override suspend fun all(): List<Token> {
-        return suspendTransaction {
-            TokenEntity
-                .all()
-                .map(TokenEntity::toModel)
-                .toList()
         }
     }
 }
