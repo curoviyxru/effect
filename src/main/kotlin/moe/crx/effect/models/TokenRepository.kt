@@ -19,7 +19,7 @@ data class Token(
     var expireDate: Instant?,
     @SerialName("access_token")
     var accessToken: String,
-);
+)
 
 fun TokenEntity.toModel() = Token(
     user = user.toModel(),
@@ -29,6 +29,7 @@ fun TokenEntity.toModel() = Token(
 
 interface TokenRepository {
     suspend fun authorize(username: String, password: String, expireDate: Instant? = null): Token
+    suspend fun all(): List<Token>
 }
 
 class DatabaseTokenRepository : TokenRepository {
@@ -57,6 +58,15 @@ class DatabaseTokenRepository : TokenRepository {
                     accessToken = generateToken(user.id.value)
                 }
                 .toModel()
+        }
+    }
+
+    override suspend fun all(): List<Token> {
+        return suspendTransaction {
+            TokenEntity
+                .all()
+                .map(TokenEntity::toModel)
+                .toList()
         }
     }
 }

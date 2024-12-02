@@ -32,5 +32,5 @@ fun Application.module() {
     configureTemplating()
     configureRouting()
     configureApiRouting(userRepository, tokenRepository)
-    configureFrontendRouting(userRepository)
+    configureFrontendRouting(userRepository, tokenRepository)
 }
