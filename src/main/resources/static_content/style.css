@@ -1,0 +1,264 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.header {
+    width: 100%;
+    background-color: #2d3436;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    color: black;
+}
+
+.header-content {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.button, textarea, input[type=text], input[type=password] {
+    background-color: white;
+    border: 1px solid #dfe6e9;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+textarea, input[type=text], input[type=password] {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    cursor: text;
+}
+
+.blog-feed-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header input {
+    margin-bottom: 0;
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.category {
+    padding: 5px 15px;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #dfe6e9;
+    text-align: center;
+}
+
+.category:hover {
+    background-color: #dfe6e9;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.pagination button {
+    background-color: white;
+    border: 1px solid #dfe6e9;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.pagination button:hover {
+    background-color: #dfe6e9;
+}
+
+.post-card, .request-message {
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.request-message.error {
+    background-color: #dfe6e9;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.post-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    max-height: 600px;
+    object-fit: contain;
+}
+
+.post-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+}
+
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #777;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-header img {
+  margin-right: 10px;
+  width: 36px;
+  height: 36px;
+}
+
+.post-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.post-info span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.post-category {
+    font-size: 16px;
+}
+
+.post-date {
+    color: #555;
+    font-weight: normal;
+}
+
+.post-author {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.post-username {
+    color: #555;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+}
+
+.icon img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.comment-text {
+    font-size: 16px;
+    color: #555;
+    white-space: pre-wrap;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.comment-header img {
+  margin-right: 10px;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+}
+
+.comment-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.comment-info span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.comment-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    max-height: 600px;
+    object-fit: contain;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 50px;
+    margin-bottom: 15px;
+}
+
+.stat-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #555;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: bold;
+  color: #000;
+  margin-top: 10px;
+}
+
+.profile-button-row {
+    margin-bottom: 10px;
+}

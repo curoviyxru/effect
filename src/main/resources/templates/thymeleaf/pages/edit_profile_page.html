@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Feed</title>
+    <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="site-name"><a href="/">Blogs</a></div>
+        <a href="/login"><span class="button login-button" th:text="${current_user != null} ? 'Profile' : 'Login'"></span></a>
+    </div>
+</div>
+
+<div class="blog-feed-container">
+    <div th:if="${return_message != null}" th:text="${return_message}" class="request-message error"></div>
+
+    <div class="post-card">
+        <form method="post" enctype="multipart/form-data">
+            <div class="post-title">Edit profile</div>
+            <div>
+                <input type="text" placeholder="Full name" name="full_name" th:value="${full_name}">
+            </div>
+            <div>
+                <textarea placeholder="About" name="about" th:text="${about}"></textarea>
+            </div>
+            <div>
+                <input type="password" placeholder="Password" name="password">
+            </div>
+            <div>
+                <input class="button" type="submit" value="Update">
+                <input accept="image/*" type="file" placeholder="Profile image" name="profile_image">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

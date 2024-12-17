@@ -22,7 +22,7 @@ import moe.crx.effect.models.UserRepository
 fun Route.usersTable(userRepository: UserRepository) {
     get("/users") {
         val users = userRepository.all()
-        call.respond(ThymeleafContent("users_table", mapOf("users" to users)))
+        call.respond(ThymeleafContent("tables/users_table", mapOf("users" to users)))
     }
     post("/users") {
         val form = call.receiveParameters()
@@ -48,28 +48,28 @@ fun Route.usersTable(userRepository: UserRepository) {
         }
 
         val users = userRepository.all()
-        call.respond(ThymeleafContent("users_table", mapOf("users" to users)))
+        call.respond(ThymeleafContent("tables/users_table", mapOf("users" to users)))
     }
 }
 
 fun Route.tokensTable(tokenRepository: TokenRepository) {
     get("/tokens") {
         val tokens = tokenRepository.all()
-        call.respond(ThymeleafContent("tokens_table", mapOf("tokens" to tokens)))
+        call.respond(ThymeleafContent("tables/tokens_table", mapOf("tokens" to tokens)))
     }
 }
 
 fun Route.feedsTable(feedRepository: FeedRepository) {
     get("/feeds") {
         val feeds = feedRepository.all()
-        call.respond(ThymeleafContent("feeds_table", mapOf("feeds" to feeds)))
+        call.respond(ThymeleafContent("tables/feeds_table", mapOf("feeds" to feeds)))
     }
 }
 
 fun Route.commentsTable(commentRepository: CommentRepository) {
     get("/comments") {
         val comments = commentRepository.all()
-        call.respond(ThymeleafContent("comments_table", mapOf("comments" to comments)))
+        call.respond(ThymeleafContent("tables/comments_table", mapOf("comments" to comments)))
     }
     post("/comments") {
         val form = call.receiveParameters()
@@ -98,14 +98,14 @@ fun Route.commentsTable(commentRepository: CommentRepository) {
         }
 
         val comments = commentRepository.all()
-        call.respond(ThymeleafContent("comments_table", mapOf("comments" to comments)))
+        call.respond(ThymeleafContent("tables/comments_table", mapOf("comments" to comments)))
     }
 }
 
 fun Route.imagesTable(imageRepository: ImageRepository) {
     get("/images") {
         val images = imageRepository.all()
-        call.respond(ThymeleafContent("images_table", mapOf("images" to images)))
+        call.respond(ThymeleafContent("tables/images_table", mapOf("images" to images)))
     }
     post("/images") {
         val form = call.receiveParameters()
@@ -131,14 +131,14 @@ fun Route.imagesTable(imageRepository: ImageRepository) {
         }
 
         val images = imageRepository.all()
-        call.respond(ThymeleafContent("images_table", mapOf("images" to images)))
+        call.respond(ThymeleafContent("tables/images_table", mapOf("images" to images)))
     }
 }
 
 fun Route.postsTable(postRepository: PostRepository) {
     get("/posts") {
         val posts = postRepository.all()
-        call.respond(ThymeleafContent("posts_table", mapOf("posts" to posts)))
+        call.respond(ThymeleafContent("tables/posts_table", mapOf("posts" to posts)))
     }
     post("/posts") {
         val form = call.receiveParameters()
@@ -169,6 +169,6 @@ fun Route.postsTable(postRepository: PostRepository) {
         }
 
         val posts = postRepository.all()
-        call.respond(ThymeleafContent("posts_table", mapOf("posts" to posts)))
+        call.respond(ThymeleafContent("tables/posts_table", mapOf("posts" to posts)))
     }
 }

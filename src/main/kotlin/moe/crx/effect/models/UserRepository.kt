@@ -4,11 +4,15 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import moe.crx.effect.database.CommentsTable
 import moe.crx.effect.database.ImageEntity
 import moe.crx.effect.database.UserEntity
 import moe.crx.effect.database.UsersTable
+import moe.crx.effect.utils.compareDate
 import moe.crx.effect.utils.hashPassword
 import moe.crx.effect.utils.suspendTransaction
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
 
 @Serializable
 data class User(
@@ -32,12 +36,28 @@ fun UserEntity.toModel() = User(
 )
 
 interface UserRepository : BaseRepository<User> {
+    suspend fun count(date: Instant? = null): Long
     suspend fun create(value: User, password: String?): User
     suspend fun update(value: User, password: String?): User?
     suspend fun getByUsername(username: String): User?
 }
 
 class DatabaseUserRepository : UserRepository {
+    override suspend fun count(date: Instant?): Long {
+        return suspendTransaction {
+            val query = (UsersTable).selectAll()
+
+            date?.let {
+                query.andWhere {
+                    compareDate(UsersTable.creationDate, date)
+                }
+            }
+
+            query
+                .count()
+        }
+    }
+
     override suspend fun all(): List<User> {
         return suspendTransaction {
             UserEntity

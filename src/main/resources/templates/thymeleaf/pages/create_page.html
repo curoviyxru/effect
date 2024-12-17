@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Feed</title>
+    <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="site-name"><a href="/">Blogs</a></div>
+        <a href="/login"><span class="button login-button" th:text="${current_user != null} ? 'Profile' : 'Login'"></span></a>
+    </div>
+</div>
+
+<div class="blog-feed-container">
+    <div th:if="${return_message != null}" th:text="${return_message}" class="request-message error"></div>
+
+    <div class="post-card">
+        <form method="post" enctype="multipart/form-data">
+            <div class="post-title">Create a post</div>
+            <div>
+                <input type="text" placeholder="Title" name="title" th:value="${title}">
+            </div>
+            <div>
+                <input type="text" placeholder="Category" name="category" th:value="${category}">
+            </div>
+            <div>
+                <textarea placeholder="Article text" name="full_text" th:text="${fullText}"></textarea>
+            </div>
+            <div>
+                <textarea placeholder="Preview text" name="preview_text" th:text="${previewText}"></textarea>
+            </div>
+            <div>
+                <input class="button" type="submit" value="Create">
+                <input accept="image/*" type="file" placeholder="Banner image" name="banner_image">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

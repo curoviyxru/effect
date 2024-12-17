@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Feed</title>
+    <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="site-name"><a href="/">Blogs</a></div>
+        <a href="/login"><span class="button login-button" th:text="${current_user != null} ? 'Profile' : 'Login'"></span></a>
+    </div>
+</div>
+
+<div class="blog-feed-container">
+    <div th:if="${return_message != null}" th:text="${return_message}" class="request-message error"></div>
+
+    <div class="post-card">
+        <div class="post-header">
+            <img th:src="${feed.user.image != null} ? ${feed.user.image.url} : '/static/no_avatar.png'" alt="Comment avatar">
+            <div class="post-info">
+                <div class="post-author" th:title="${feed.user.about}" th:text="${feed.user.fullName} ?: '@'+ ${feed.user.username}"></div>
+                <div>
+                    <a th:if="${feed.post.category != null}" th:href="'/?query=category%3D'+${feed.post.category}"><span class="post-category" th:text="${feed.post.category}"></span></a>
+                    <span class="post-date" th:text="${feed.post.creationDate}"></span>
+                </div>
+            </div>
+        </div>
+        <div th:text="${feed.post.title}" class="post-title"></div>
+        <img th:if="${feed.post.image != null}" th:src="${feed.post.image.url}" alt="Post Image" class="post-image">
+        <div class="post-text" th:text="${feed.post.fullText}"></div>
+        <div class="post-meta">
+            <div class="icon">
+                <!-- <img src="/static/chat.png" alt="Comment Icon"><span th:text="${comments_count}"></span> -->
+            </div>
+            <div class="icon">
+                <img src="/static/visibility.png" alt="Views Icon"><span th:text="${feed.post.viewCount}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-card">
+        <form method="post" enctype="multipart/form-data">
+            <div class="post-title">Comments</div>
+            <div>
+                <textarea name="text" placeholder="Write a comment..."></textarea>
+            </div>
+            <div>
+                <input class="button" type="submit" value="Post">
+                <input accept="image/*" type="file" placeholder="Banner image" name="comment_image">
+            </div>
+        </form>
+    </div>
+
+    <div class="post-card" th:each="comment: ${comment_list}">
+        <div class="comment-header">
+            <img th:src="${comment.user.image != null} ? ${comment.user.image.url} : '/static/no_avatar.png'" alt="Comment avatar">
+            <div class="comment-info">
+                <span class="post-author" th:title="${comment.user.about}" th:text="${comment.user.fullName} ?: '@'+ ${comment.user.username}"></span>
+                <span class="post-date" th:text="${comment.creationDate}"></span>
+            </div>
+        </div>
+        <div class="comment-text" th:if="${comment.text != null}" th:text="${comment.text}"></div>
+        <img th:if="${comment.image != null}" th:src="${comment.image.url}" alt="Post Image" class="comment-image">
+    </div>
+</div>
+</body>
+</html>

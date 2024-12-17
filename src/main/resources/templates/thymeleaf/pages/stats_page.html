@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Feed</title>
+    <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="site-name"><a href="/">Blogs</a></div>
+        <a href="/login"><span class="button login-button" th:text="${current_user != null} ? 'Profile' : 'Login'"></span></a>
+    </div>
+</div>
+
+<div class="blog-feed-container">
+    <div th:if="${return_message != null}" th:text="${return_message}" class="request-message error"></div>
+
+    <div class="post-card">
+        <div class="post-title">Statistics</div>
+        <div class="post-title">Posts</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label">in day</div>
+                <div class="stat-value" th:text="${posts_day}"></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">overall</div>
+                <div class="stat-value" th:text="${posts}"></div>
+            </div>
+        </div>
+        <div class="post-title">Comments</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label">in day</div>
+                <div class="stat-value" th:text="${comments_day}"></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">overall</div>
+                <div class="stat-value" th:text="${comments}"></div>
+            </div>
+        </div>
+        <div class="post-title">Users</div>
+        <div class="stats-container">
+            <div class="stat-row">
+                <div class="stat-label">in day</div>
+                <div class="stat-value" th:text="${users_day}"></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">overall</div>
+                <div class="stat-value" th:text="${users}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

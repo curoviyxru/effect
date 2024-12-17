@@ -12,9 +12,10 @@ import moe.crx.effect.models.DatabaseUserRepository
 import moe.crx.effect.plugins.configureApiRouting
 import moe.crx.effect.plugins.configureDatabases
 import moe.crx.effect.plugins.configureFrontendRouting
+import moe.crx.effect.plugins.configureImageRouting
 import moe.crx.effect.plugins.configureLimits
 import moe.crx.effect.plugins.configureLogging
-import moe.crx.effect.plugins.configureRouting
+import moe.crx.effect.plugins.configureStaticRouting
 import moe.crx.effect.plugins.configureSerialization
 import moe.crx.effect.plugins.configureStatusPages
 import moe.crx.effect.plugins.configureTemplating
@@ -36,9 +37,10 @@ fun Application.module() {
     configureSerialization()
     configureLogging()
     configureLimits()
-    configureStatusPages()
+    configureStatusPages(tokenRepository)
     configureTemplating()
-    configureRouting()
+    configureStaticRouting()
+    configureImageRouting()
     configureApiRouting(userRepository, tokenRepository)
     configureFrontendRouting(userRepository, tokenRepository, feedRepository, postRepository, commentRepository, imageRepository)
 }

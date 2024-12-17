@@ -1,11 +1,17 @@
 package moe.crx.effect.models
 
+import io.ktor.http.content.PartData
+import io.ktor.utils.io.availableForRead
+import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.effect.database.ImageEntity
 import moe.crx.effect.utils.suspendTransaction
+import java.io.File
+import java.util.UUID
+import javax.imageio.ImageIO
 
 @Serializable
 data class Image(
@@ -28,7 +34,9 @@ fun ImageEntity.toModel() = Image(
     creationDate = creationDate
 )
 
-interface ImageRepository : BaseRepository<Image>
+interface ImageRepository : BaseRepository<Image> {
+    suspend fun upload(data: PartData.FileItem): Image?
+}
 
 class DatabaseImageRepository : ImageRepository {
     override suspend fun all(): List<Image> {
@@ -79,5 +87,38 @@ class DatabaseImageRepository : ImageRepository {
         }
 
         return value
+    }
+
+    override suspend fun upload(data: PartData.FileItem): Image? {
+        val provider = data.provider()
+
+        if (provider.availableForRead > 20 * 1024 * 1024) {
+            throw IllegalArgumentException("Image is bigger than 20 MiB")
+        }
+
+        val stream = provider.toInputStream()
+        val image = ImageIO.read(stream)
+
+        if (image == null) {
+            return null
+        }
+
+        val directory = File("uploads")
+        directory.mkdirs()
+        val fileName = Clock.System.now().toEpochMilliseconds().toString() + "_" + UUID.randomUUID().toString() + ".png"
+        val file = File(directory, fileName)
+        file.createNewFile()
+
+        val width = image.width
+        val height = image.height
+        ImageIO.write(image, "png", file)
+        val fileSize = file.length()
+
+        return create(Image(
+            url = "/uploads/$fileName",
+            width = width,
+            height = height,
+            fileSize = fileSize
+        ))
     }
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Feed</title>
+    <link href="/static/style.css" rel="stylesheet" />
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <div class="site-name"><a href="/">Blogs</a></div>
+        <a href="/login"><span class="button login-button" th:text="${current_user != null} ? 'Profile' : 'Login'"></span></a>
+    </div>
+</div>
+
+<div class="blog-feed-container">
+    <div th:if="${return_message != null}" th:text="${return_message}" class="request-message error"></div>
+
+    <div class="post-card">
+        <form>
+            <div class="post-title">Profile</div>
+            <div class="comment-header">
+                <img th:src="${user.image != null} ? ${user.image.url} : '/static/no_avatar.png'" alt="Comment avatar">
+                <div class="comment-info">
+                    <span class="post-author" th:text="${user.fullName}"></span>
+                    <span class="post-username" th:text="'@'+${user.username}"></span>
+                </div>
+            </div>
+            <div class="profile-button-row">
+                <a href="/logout"><span class="button">Logout</span></a>
+                <a href="/create"><span class="button">Create post</span></a>
+                <a href="/profile/edit"><span class="button">Edit profile</span></a>
+                <a href="/stats"><span class="button">Statistics</span></a>
+            </div>
+            <div class="comment-text" th:text="${user.about}"></div>
+        </form>
+    </div>
+
+    <div class="post-card" th:each="feed: ${feed_list}">
+        <div class="post-header">
+            <img th:src="${feed.user.image != null} ? ${feed.user.image.url} : '/static/no_avatar.png'" alt="Comment avatar">
+            <div class="post-info">
+                <div class="post-author" th:title="${feed.user.about}" th:text="${feed.user.fullName} ?: '@'+ ${feed.user.username}"></div>
+                <div>
+                    <a th:if="${feed.post.category != null}" th:href="'/?query=category%3D'+${feed.post.category}"><span class="post-category" th:text="${feed.post.category}"></span></a>
+                    <span class="post-date" th:text="${feed.post.creationDate}"></span>
+                </div>
+            </div>
+        </div>
+        <a th:href="'/post/' + ${feed.post.id}"><div th:text="${feed.post.title}" class="post-title"></div></a>
+        <a th:if="${feed.post.image != null}" th:href="'/post/' + ${feed.post.id}"><img th:src="${feed.post.image.url}" alt="Post Image" class="post-image"></a>
+        <a th:href="'/post/' + ${feed.post.id}"><div class="post-text" th:text="${feed.post.previewText} ?: ${feed.post.fullText}"></div></a>
+        <div class="post-meta">
+            <div class="icon">
+                <!-- <img src="/static/chat.png" alt="Comment Icon"><span th:text="${comments_count}"></span> -->
+            </div>
+            <div class="icon">
+                <img src="/static/visibility.png" alt="Views Icon"><span th:text="${feed.post.viewCount}"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <a th:if="${!first_page}" th:href="'/profile?page=' + ${current_page - 1} + ${query_url}"><button >&lt;</button></a>
+        <a th:each="page: ${page_list}" th:href="'/profile?page=' + ${page} + ${query_url}"><button th:text="${page}"></button></a>
+        <a th:if="${!last_page}" th:href="'/profile?page=' + ${current_page + 1} + ${query_url}"><button>&gt;</button></a>
+    </div>
+</div>
+</body>
+</html>

@@ -5,10 +5,14 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.effect.database.CommentEntity
+import moe.crx.effect.database.CommentsTable
 import moe.crx.effect.database.ImageEntity
 import moe.crx.effect.database.PostEntity
 import moe.crx.effect.database.UserEntity
+import moe.crx.effect.utils.compareDate
 import moe.crx.effect.utils.suspendTransaction
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
 
 @Serializable
 data class Comment(
@@ -33,9 +37,28 @@ fun CommentEntity.toModel() = Comment(
     lastEditDate = lastEditDate,
 )
 
-interface CommentRepository : BaseRepository<Comment>
+interface CommentRepository : BaseRepository<Comment> {
+    suspend fun count(date: Instant? = null): Long
+    suspend fun get(post: Post): List<Comment>
+    suspend fun count(post: Post): Long
+}
 
 class DatabaseCommentRepository : CommentRepository {
+    override suspend fun count(date: Instant?): Long {
+        return suspendTransaction {
+            val query = (CommentsTable).selectAll()
+
+            date?.let {
+                query.andWhere {
+                    compareDate(CommentsTable.creationDate, date)
+                }
+            }
+
+            query
+                .count()
+        }
+    }
+
     override suspend fun all(): List<Comment> {
         return suspendTransaction {
             CommentEntity
@@ -86,5 +109,22 @@ class DatabaseCommentRepository : CommentRepository {
         }
 
         return value
+    }
+
+    override suspend fun get(post: Post): List<Comment> {
+        return suspendTransaction {
+            CommentEntity
+                .find { CommentsTable.postId eq post.id }
+                .map(CommentEntity::toModel)
+                .toList()
+        }
+    }
+
+    override suspend fun count(post: Post): Long {
+        return suspendTransaction {
+            CommentEntity
+                .find { CommentsTable.postId eq post.id }
+                .count()
+        }
     }
 }

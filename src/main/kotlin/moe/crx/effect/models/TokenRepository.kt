@@ -5,6 +5,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.effect.database.TokenEntity
+import moe.crx.effect.database.TokensTable
 import moe.crx.effect.database.UserEntity
 import moe.crx.effect.database.UsersTable
 import moe.crx.effect.utils.generateToken
@@ -29,6 +30,7 @@ fun TokenEntity.toModel() = Token(
 
 interface TokenRepository : BaseReadOnlyRepository<Token> {
     suspend fun authorize(username: String, password: String, expireDate: Instant? = null): Token
+    suspend fun authorize(accessToken: String): Token?
 }
 
 class DatabaseTokenRepository : TokenRepository {
@@ -41,6 +43,16 @@ class DatabaseTokenRepository : TokenRepository {
         }
     }
 
+    override suspend fun authorize(accessToken: String): Token? {
+        return suspendTransaction {
+            TokenEntity
+                .find { TokensTable.accessToken eq accessToken }
+                .limit(1)
+                .map(TokenEntity::toModel)
+                .firstOrNull()
+        }
+    }
+
     override suspend fun authorize(username: String, password: String, expireDate: Instant?): Token {
         val user = suspendTransaction {
             UserEntity
@@ -50,11 +62,11 @@ class DatabaseTokenRepository : TokenRepository {
         }
 
         if (user == null) {
-            throw IllegalArgumentException("username is not registered")
+            throw IllegalArgumentException("Username is not registered.")
         }
 
         if (user.passwordHash != hashPassword(username, password)) {
-            throw IllegalArgumentException("wrong password")
+            throw IllegalArgumentException("Wrong password.")
         }
 
         return suspendTransaction {
