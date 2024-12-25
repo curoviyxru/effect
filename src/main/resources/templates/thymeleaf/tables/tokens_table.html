@@ -10,7 +10,6 @@
     <thead>
     <tr>
         <th>User ID</th>
-        <th>Expire date</th>
         <th>Access token</th>
     </tr>
     </thead>
@@ -18,7 +17,6 @@
     <tr th:each="token: ${tokens}">
         <form method="post">
             <td><input type="text" readonly="readonly" name="user_id" th:value="${token.user.id}"></td>
-            <td><input type="text" readonly="readonly" name="expire_date" th:value="${token.expireDate}"></td>
             <td><input type="text" readonly="readonly" name="access_token" th:value="${token.accessToken}"></td>
         </form>
     </tr>

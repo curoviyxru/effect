@@ -15,7 +15,6 @@
         <th>Image ID</th>
         <th>Post ID</th>
         <th>Creation date</th>
-        <th>Last edit date</th>
         <th colspan="2">Actions</th>
     </tr>
     </thead>
@@ -28,7 +27,6 @@
             <td><input type="text" name="image_id"></td>
             <td><input type="text" name="post_id"></td>
             <td><input type="text" name="creation_date"></td>
-            <td><input type="text" name="last_edit_date"></td>
             <td><input type="submit" value="Create"></td>
             <td></td>
         </form>
@@ -40,8 +38,7 @@
             <td><input type="text" name="text" th:value="${comment.text}"></td>
             <td><input type="text" name="image_id" th:value="${comment.image != null} ? ${comment.image.id}"></td>
             <td><input type="text" name="post_id" th:value="${comment.post.id}"></td>
-            <td><input type="text" name="creation_date" th:value="${comment.creationDateString}"></td>
-            <td><input type="text" name="last_edit_date" th:value="${comment.lastEditDate}"></td>
+            <td><input type="text" name="creation_date" th:value="${comment.creationDate}"></td>
             <td><input type="submit" value="Update"></td>
         </form>
         <form method="post">

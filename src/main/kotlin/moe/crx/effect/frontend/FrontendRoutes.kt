@@ -295,6 +295,7 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
                 post.category = category
                 post.fullText = fullText
                 post.previewText = previewText
+                image?.let { post.image = it }
                 post = postRepository.update(post)
             }
 
