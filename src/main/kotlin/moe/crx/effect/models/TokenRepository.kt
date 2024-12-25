@@ -16,8 +16,6 @@ import moe.crx.effect.utils.suspendTransaction
 data class Token(
     @SerialName("user")
     var user: User = User(),
-    @SerialName("expire_date")
-    var expireDate: Instant? = null,
     @SerialName("access_token")
     var accessToken: String = "",
 )

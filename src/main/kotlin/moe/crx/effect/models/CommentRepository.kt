@@ -2,6 +2,12 @@ package moe.crx.effect.models
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.effect.database.CommentEntity
@@ -10,6 +16,7 @@ import moe.crx.effect.database.ImageEntity
 import moe.crx.effect.database.PostEntity
 import moe.crx.effect.database.UserEntity
 import moe.crx.effect.utils.compareDate
+import moe.crx.effect.utils.formatDateTimeString
 import moe.crx.effect.utils.suspendTransaction
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
@@ -23,8 +30,7 @@ data class Comment(
     var post: Post = Post(),
     @SerialName("creation_date")
     var creationDate: Instant = Clock.System.now(),
-    @SerialName("last_edit_date")
-    var lastEditDate: Instant? = null,
+    var creationDateString: String = formatDateTimeString(creationDate),
 )
 
 fun CommentEntity.toModel() = Comment(

@@ -23,7 +23,7 @@
                 <div class="post-author" th:title="${feed.user.about}" th:text="${feed.user.fullName} ?: '@'+ ${feed.user.username}"></div>
                 <div>
                     <a th:if="${feed.post.category != null}" th:href="'/?query=category%3D'+${feed.post.category}"><span class="post-category" th:text="${feed.post.category}"></span></a>
-                    <span class="post-date" th:text="${feed.post.creationDate}"></span>
+                    <span class="post-date" th:text="${feed.post.creationDateString}"></span>
                 </div>
             </div>
         </div>
@@ -33,8 +33,8 @@
         <div class="post-meta">
             <div class="icon">
                 <!-- <img src="/static/chat.png" alt="Comment Icon"><span th:text="${comments_count}"></span> -->
-                <a th:if="${current_user != null && current_user.id == feed.user.id}" th:href="'/create?id='+${feed.post.id}"><span class="button">Edit</span></a>
-                <a th:if="${current_user != null && current_user.id == feed.user.id}" th:href="'/deletePost?id='+${feed.post.id}"><span class="button">Delete</span></a>
+                <a th:if="${current_user != null && (current_user.id == feed.user.id || current_user.username == 'admin')}" th:href="'/create?id='+${feed.post.id}"><span class="button">Edit</span></a>
+                <a th:if="${current_user != null && (current_user.id == feed.user.id || current_user.username == 'admin')}" th:href="'/deletePost?id='+${feed.post.id}"><span class="button">Delete</span></a>
             </div>
             <div class="icon">
                 <img src="/static/visibility.png" alt="Views Icon"><span th:text="${feed.post.viewCount}"></span>
@@ -60,9 +60,9 @@
             <img th:src="${comment.user.image != null} ? ${comment.user.image.url} : '/static/no_avatar.png'" alt="Comment avatar">
             <div class="comment-info">
                 <span class="post-author" th:title="${comment.user.about}" th:text="${comment.user.fullName} ?: '@'+ ${comment.user.username}"></span>
-                <span class="post-date" th:text="${comment.creationDate}"></span>
+                <span class="post-date" th:text="${comment.creationDateString}"></span>
             </div>
-            <a th:if="${current_user != null && current_user.id == comment.user.id}" th:href="'/deleteComment?id='+${comment.id}"><span class="button">Delete</span></a>
+            <a th:if="${current_user != null && (current_user.id == comment.user.id || current_user.username == 'admin')}" th:href="'/deleteComment?id='+${comment.id}"><span class="button">Delete</span></a>
         </div>
         <div class="comment-text" th:if="${comment.text != null}" th:text="${comment.text}"></div>
         <img th:if="${comment.image != null}" th:src="${comment.image.url}" alt="Post Image" class="comment-image">

@@ -30,8 +30,9 @@
                 <a href="/logout"><span class="button">Logout</span></a>
                 <a href="/create"><span class="button">Create post</span></a>
                 <a href="/profile/edit"><span class="button">Edit profile</span></a>
-                <a href="/stats"><span class="button">Statistics</span></a>
+                <a th:if="${current_user != null && current_user.username == 'admin'}" href="/stats"><span class="button">Statistics</span></a>
             </div>
+            <div class="comment-text" th:text="'Registered ' + ${user.creationDateString}"></div>
             <div class="comment-text" th:text="${user.about}"></div>
         </form>
     </div>
@@ -43,7 +44,7 @@
                 <div class="post-author" th:title="${feed.user.about}" th:text="${feed.user.fullName} ?: '@'+ ${feed.user.username}"></div>
                 <div>
                     <a th:if="${feed.post.category != null}" th:href="'/?query=category%3D'+${feed.post.category}"><span class="post-category" th:text="${feed.post.category}"></span></a>
-                    <span class="post-date" th:text="${feed.post.creationDate}"></span>
+                    <span class="post-date" th:text="${feed.post.creationDateString}"></span>
                 </div>
             </div>
         </div>

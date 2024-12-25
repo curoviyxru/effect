@@ -13,7 +13,7 @@ suspend fun RoutingContext.handleToken(tokenRepository: TokenRepository): User? 
 
 suspend fun handleToken(call: ApplicationCall, tokenRepository: TokenRepository): User? {
     val token = call.request.cookies["token"] ?: return null
-    return tokenRepository.authorize(token)?.user;
+    return tokenRepository.authorize(token)?.user
 }
 
 fun isAdmin(user: User?): Boolean {

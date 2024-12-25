@@ -121,9 +121,6 @@ fun Route.commentsTable(commentRepository: CommentRepository, tokenRepository: T
             creationDate = form["creation_date"]
                 .runCatching { Instant.parse(this ?: "") }
                 .getOrDefault(Clock.System.now()),
-            lastEditDate = form["last_edit_date"]
-                .runCatching { Instant.parse(this ?: "") }
-                .getOrNull(),
         )
 
         if (delete) {
@@ -165,10 +162,7 @@ fun Route.imagesTable(imageRepository: ImageRepository, tokenRepository: TokenRe
             url = form["url"] ?: "",
             width = form["width"]?.toIntOrNull() ?: 0,
             height = form["height"]?.toIntOrNull() ?: 0,
-            fileSize = form["file_size"]?.toLongOrNull() ?: 0,
-            creationDate = form["creation_date"]
-                .runCatching { Instant.parse(this ?: "") }
-                .getOrDefault(Clock.System.now())
+            fileSize = form["file_size"]?.toLongOrNull() ?: 0
         )
 
         if (delete) {
@@ -215,10 +209,7 @@ fun Route.postsTable(postRepository: PostRepository, tokenRepository: TokenRepos
                 .runCatching { Instant.parse(this ?: "") }
                 .getOrDefault(Clock.System.now()),
             viewCount = form["view_count"]?.toLongOrNull() ?: 0,
-            category = form["category"],
-            lastEditDate = form["last_edit_date"]
-                .runCatching { Instant.parse(this ?: "") }
-                .getOrNull(),
+            category = form["category"]
         )
 
         if (delete) {

@@ -1,5 +1,11 @@
 package moe.crx.effect.utils
 
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
+
 fun generatePages(page: Long, pagesCount: Long): List<Long> {
     val pageList = mutableListOf<Long>()
 
@@ -31,4 +37,18 @@ fun parseSearchQuery(query: String): Map<String, String> {
     }
 
     return map
+}
+
+fun formatDateTimeString(date: Instant): String {
+    return LocalDateTime.Format {
+        dayOfMonth()
+        char('.')
+        monthNumber()
+        char('.')
+        year()
+        char(' ')
+        hour()
+        char(':')
+        minute()
+    }.format(date.toLocalDateTime(TimeZone.currentSystemDefault()))
 }

@@ -12,6 +12,7 @@ import moe.crx.effect.utils.compareDate
 import moe.crx.effect.utils.suspendTransaction
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.lowerCase
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 
@@ -57,7 +58,7 @@ class DatabaseFeedRepository : FeedRepository {
             }
             titleContains?.let {
                 query.andWhere {
-                    PostsTable.title like "%$titleContains%"
+                    PostsTable.title.lowerCase() like "%$titleContains%".lowercase()
                 }
             }
             category?.let {
@@ -82,7 +83,7 @@ class DatabaseFeedRepository : FeedRepository {
             }
             textContains?.let {
                 query.andWhere {
-                    (PostsTable.previewText like "%$textContains%").or(PostsTable.fullText like "%$textContains%")
+                    (PostsTable.previewText.lowerCase() like "%$textContains%".lowercase()).or(PostsTable.fullText.lowerCase() like "%$textContains%".lowercase())
                 }
             }
 
@@ -110,7 +111,7 @@ class DatabaseFeedRepository : FeedRepository {
             }
             titleContains?.let {
                 query.andWhere {
-                    PostsTable.title like "%$titleContains%"
+                    PostsTable.title.lowerCase() like "%$titleContains%".lowercase()
                 }
             }
             category?.let {
@@ -135,7 +136,7 @@ class DatabaseFeedRepository : FeedRepository {
             }
             textContains?.let {
                 query.andWhere {
-                    (PostsTable.previewText like "%$textContains%").or(PostsTable.fullText like "%$textContains%")
+                    (PostsTable.previewText.lowerCase() like "%$textContains%".lowercase()).or(PostsTable.fullText.lowerCase() like "%$textContains%".lowercase())
                 }
             }
 

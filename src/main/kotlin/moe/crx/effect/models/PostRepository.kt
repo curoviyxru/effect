@@ -10,6 +10,7 @@ import moe.crx.effect.database.PostEntity
 import moe.crx.effect.database.PostsTable
 import moe.crx.effect.database.UsersTable
 import moe.crx.effect.utils.compareDate
+import moe.crx.effect.utils.formatDateTimeString
 import moe.crx.effect.utils.suspendTransaction
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.or
@@ -30,8 +31,7 @@ data class Post(
     @SerialName("view_count")
     var viewCount: Long = 0,
     var category: String? = null,
-    @SerialName("last_edit_date")
-    var lastEditDate: Instant? = null,
+    var creationDateString: String = formatDateTimeString(creationDate),
 )
 
 fun PostEntity.toModel() = Post(

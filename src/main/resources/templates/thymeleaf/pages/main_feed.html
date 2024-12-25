@@ -35,7 +35,7 @@
                 <div class="post-author" th:title="${feed.user.about}" th:text="${feed.user.fullName} ?: '@'+ ${feed.user.username}"></div>
                 <div>
                     <a th:if="${feed.post.category != null}" th:href="'/?query=category%3D'+${feed.post.category}"><span class="post-category" th:text="${feed.post.category}"></span></a>
-                    <span class="post-date" th:text="${feed.post.creationDate}"></span>
+                    <span class="post-date" th:text="${feed.post.creationDateString}"></span>
                 </div>
             </div>
         </div>

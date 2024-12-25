@@ -45,8 +45,8 @@ suspend fun RoutingContext.servePostsData(feedRepository: FeedRepository, parsed
         parsedQuery["username"],
         parsedQuery["title"],
         parsedQuery["category"],
-        parsedQuery["minViews"]?.toLongOrNull(),
-        parsedQuery["maxViews"]?.toLongOrNull(),
+        parsedQuery["minviews"]?.toLongOrNull(),
+        parsedQuery["maxviews"]?.toLongOrNull(),
         parsedQuery["date"]
             .runCatching {
                 LocalDate.parse(this ?: "", LocalDate.Format {
@@ -78,8 +78,8 @@ suspend fun RoutingContext.servePostsData(feedRepository: FeedRepository, parsed
         parsedQuery["username"],
         parsedQuery["title"],
         parsedQuery["category"],
-        parsedQuery["minViews"]?.toLongOrNull(),
-        parsedQuery["maxViews"]?.toLongOrNull(),
+        parsedQuery["minviews"]?.toLongOrNull(),
+        parsedQuery["maxviews"]?.toLongOrNull(),
         parsedQuery["date"]
             .runCatching {
                 LocalDate.parse(this ?: "", LocalDate.Format {
@@ -109,10 +109,10 @@ suspend fun RoutingContext.renderMainPage(tokenRepository: TokenRepository, feed
     val parsedQuery = parseSearchQuery(query)
 
     map["query_url"] = if (!query.isBlank()) "&query=$query" else ""
+    map["query"] = query
 
     servePostsData(feedRepository, parsedQuery, map)
 
-    map["query"] = query
     call.respond(ThymeleafContent("pages/main_feed", map))
 }
 
@@ -138,21 +138,23 @@ fun Route.loginPage(tokenRepository: TokenRepository, userRepository: UserReposi
             val username = form["username"]
             val password = form["password"]
 
-            if (username == null) {
+            if (username == null || username.isBlank()) {
                 throw IllegalArgumentException("Username is empty.")
             }
 
-            if (password == null) {
+            if (password == null || password.isBlank()) {
                 throw IllegalArgumentException("Password is empty.")
             }
 
             try {
-                userRepository.create(User(username = username), password)
+                if (userRepository.getByUsername(username) == null) {
+                    userRepository.create(User(username = username), password)
+                }
             } catch (_: Exception) { }
 
             val token = tokenRepository.authorize(username, password)
 
-            call.response.cookies.append(name = "token", value = token.accessToken)
+            call.response.cookies.append(name = "token", value = token.accessToken, maxAge = 7776000)
 
             call.respondRedirect("/profile")
         } catch (e: Exception) {
@@ -187,7 +189,7 @@ fun Route.profilePage(tokenRepository: TokenRepository, feedRepository: FeedRepo
             return@get
         }
 
-        servePostsData(feedRepository, mapOf("username" to user.username), map)
+        servePostsData(feedRepository, mapOf("username" to user.username), map, false)
 
         map["query_url"] = ""
         map["user"] = user
@@ -289,10 +291,10 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
 
                 feedRepository.create(user, post)
             } else {
-                post.title = title;
-                post.category = category;
-                post.fullText = fullText;
-                post.previewText = previewText;
+                post.title = title
+                post.category = category
+                post.fullText = fullText
+                post.previewText = previewText
                 post = postRepository.update(post)
             }
 

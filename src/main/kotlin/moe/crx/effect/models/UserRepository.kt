@@ -4,11 +4,11 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import moe.crx.effect.database.CommentsTable
 import moe.crx.effect.database.ImageEntity
 import moe.crx.effect.database.UserEntity
 import moe.crx.effect.database.UsersTable
 import moe.crx.effect.utils.compareDate
+import moe.crx.effect.utils.formatDateTimeString
 import moe.crx.effect.utils.hashPassword
 import moe.crx.effect.utils.suspendTransaction
 import org.jetbrains.exposed.sql.andWhere
@@ -24,6 +24,7 @@ data class User(
     var creationDate: Instant = Clock.System.now(),
     var about: String? = null,
     var image: Image? = null,
+    var creationDateString: String = formatDateTimeString(creationDate),
 )
 
 fun UserEntity.toModel() = User(

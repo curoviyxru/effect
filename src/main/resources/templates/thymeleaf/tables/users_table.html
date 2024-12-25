@@ -36,7 +36,7 @@
             <td><input type="text" readonly="readonly" name="id" th:value="${user.id}"></td>
             <td><input type="text" name="full_name" th:value="${user.fullName}"></td>
             <td><input type="text" name="username" th:value="${user.username}"></td>
-            <td><input type="text" name="creation_date" th:value="${user.creationDate}"></td>
+            <td><input type="text" name="creation_date" th:value="${user.creationDateString}"></td>
             <td><input type="text" name="about" th:value="${user.about}"></td>
             <td><input type="text" name="image_id" th:value="${user.image != null} ? ${user.image.id}"></td>
             <td><input type="submit" value="Update"></td>

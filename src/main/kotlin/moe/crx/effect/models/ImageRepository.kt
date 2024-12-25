@@ -4,7 +4,6 @@ import io.ktor.http.content.PartData
 import io.ktor.utils.io.availableForRead
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import moe.crx.effect.database.ImageEntity
@@ -21,8 +20,6 @@ data class Image(
     var height: Int = 0,
     @SerialName("file_size")
     var fileSize: Long = 0,
-    @SerialName("creation_date")
-    var creationDate : Instant = Clock.System.now(),
 )
 
 fun ImageEntity.toModel() = Image(
