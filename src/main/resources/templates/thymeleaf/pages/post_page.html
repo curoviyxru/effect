@@ -33,8 +33,8 @@
         <div class="post-meta">
             <div class="icon">
                 <!-- <img src="/static/chat.png" alt="Comment Icon"><span th:text="${comments_count}"></span> -->
-                <a th:href="'/create?id='+${feed.post.id}"><span class="button">Edit</span></a>
-                <a th:href="'/deletePost?id='+${feed.post.id}"><span class="button">Delete</span></a>
+                <a th:if="${current_user != null && current_user.id == feed.user.id}" th:href="'/create?id='+${feed.post.id}"><span class="button">Edit</span></a>
+                <a th:if="${current_user != null && current_user.id == feed.user.id}" th:href="'/deletePost?id='+${feed.post.id}"><span class="button">Delete</span></a>
             </div>
             <div class="icon">
                 <img src="/static/visibility.png" alt="Views Icon"><span th:text="${feed.post.viewCount}"></span>
@@ -62,7 +62,7 @@
                 <span class="post-author" th:title="${comment.user.about}" th:text="${comment.user.fullName} ?: '@'+ ${comment.user.username}"></span>
                 <span class="post-date" th:text="${comment.creationDate}"></span>
             </div>
-            <a th:href="'/deleteComment?id='+${comment.id}"><span class="button">Delete</span></a>
+            <a th:if="${current_user != null && current_user.id == comment.user.id}" th:href="'/deleteComment?id='+${comment.id}"><span class="button">Delete</span></a>
         </div>
         <div class="comment-text" th:if="${comment.text != null}" th:text="${comment.text}"></div>
         <img th:if="${comment.image != null}" th:src="${comment.image.url}" alt="Post Image" class="comment-image">

@@ -68,12 +68,12 @@ fun Application.configureFrontendRouting(userRepository: UserRepository, tokenRe
             deleteComment(tokenRepository, commentRepository)
 
             route("/tables") {
-                usersTable(userRepository)
+                usersTable(userRepository, tokenRepository)
                 tokensTable(tokenRepository)
-                feedsTable(feedRepository)
-                postsTable(postRepository)
-                commentsTable(commentRepository)
-                imagesTable(imageRepository)
+                feedsTable(feedRepository, tokenRepository)
+                postsTable(postRepository, tokenRepository)
+                commentsTable(commentRepository, tokenRepository)
+                imagesTable(imageRepository, tokenRepository)
             }
         }
     }

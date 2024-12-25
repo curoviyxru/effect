@@ -1,5 +1,6 @@
 package moe.crx.effect.frontend
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveParameters
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -19,12 +20,24 @@ import moe.crx.effect.models.TokenRepository
 import moe.crx.effect.models.User
 import moe.crx.effect.models.UserRepository
 
-fun Route.usersTable(userRepository: UserRepository) {
+fun Route.usersTable(userRepository: UserRepository, tokenRepository: TokenRepository) {
     get("/users") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val users = userRepository.all()
         call.respond(ThymeleafContent("tables/users_table", mapOf("users" to users)))
     }
     post("/users") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+        }
+
         val form = call.receiveParameters()
         val delete = form["delete"].toBoolean()
         val id = form["id"]?.toLongOrNull()
@@ -54,24 +67,48 @@ fun Route.usersTable(userRepository: UserRepository) {
 
 fun Route.tokensTable(tokenRepository: TokenRepository) {
     get("/tokens") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val tokens = tokenRepository.all()
         call.respond(ThymeleafContent("tables/tokens_table", mapOf("tokens" to tokens)))
     }
 }
 
-fun Route.feedsTable(feedRepository: FeedRepository) {
+fun Route.feedsTable(feedRepository: FeedRepository, tokenRepository: TokenRepository) {
     get("/feeds") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val feeds = feedRepository.all()
         call.respond(ThymeleafContent("tables/feeds_table", mapOf("feeds" to feeds)))
     }
 }
 
-fun Route.commentsTable(commentRepository: CommentRepository) {
+fun Route.commentsTable(commentRepository: CommentRepository, tokenRepository: TokenRepository) {
     get("/comments") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val comments = commentRepository.all()
         call.respond(ThymeleafContent("tables/comments_table", mapOf("comments" to comments)))
     }
     post("/comments") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+        }
+
         val form = call.receiveParameters()
         val delete = form["delete"].toBoolean()
         val id = form["id"]?.toLongOrNull()
@@ -102,12 +139,24 @@ fun Route.commentsTable(commentRepository: CommentRepository) {
     }
 }
 
-fun Route.imagesTable(imageRepository: ImageRepository) {
+fun Route.imagesTable(imageRepository: ImageRepository, tokenRepository: TokenRepository) {
     get("/images") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val images = imageRepository.all()
         call.respond(ThymeleafContent("tables/images_table", mapOf("images" to images)))
     }
     post("/images") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+        }
+
         val form = call.receiveParameters()
         val delete = form["delete"].toBoolean()
         val id = form["id"]?.toLongOrNull()
@@ -135,12 +184,24 @@ fun Route.imagesTable(imageRepository: ImageRepository) {
     }
 }
 
-fun Route.postsTable(postRepository: PostRepository) {
+fun Route.postsTable(postRepository: PostRepository, tokenRepository: TokenRepository) {
     get("/posts") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val posts = postRepository.all()
         call.respond(ThymeleafContent("tables/posts_table", mapOf("posts" to posts)))
     }
     post("/posts") {
+        val u = handleToken(tokenRepository)
+        if (!isAdmin(u)) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+        }
+
         val form = call.receiveParameters()
         val delete = form["delete"].toBoolean()
         val id = form["id"]?.toLongOrNull()

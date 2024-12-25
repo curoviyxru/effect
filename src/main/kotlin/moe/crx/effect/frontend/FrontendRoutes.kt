@@ -210,6 +210,11 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
         val post = if (postId != null) postRepository.view(postId) else null
 
         if (post != null) {
+            if (!isOwner(user, feedRepository.get(post))) {
+                call.respond(HttpStatusCode.Unauthorized)
+                return@get
+            }
+
             map["title"] = post.title
             map["category"] = post.category ?: ""
             map["fullText"] = post.fullText
@@ -231,6 +236,11 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
 
         val postId = call.request.queryParameters["id"]?.toLongOrNull()
         var post = if (postId != null) postRepository.view(postId) else null
+
+        if (post != null && !isOwner(user, feedRepository.get(post))) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@post
+        }
 
         val multipart = call.receiveMultipart()
         val form = mutableMapOf<String, String>()
@@ -395,6 +405,11 @@ fun Route.postPage(tokenRepository: TokenRepository, postRepository: PostReposit
 
 fun Route.statsPage(tokenRepository: TokenRepository, postRepository: PostRepository, userRepository: UserRepository, commentRepository: CommentRepository) {
     get("/stats") {
+        if (!isAdmin(handleToken(tokenRepository))) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
         val map = mutableMapOf<String, Any>()
         handleToken(tokenRepository)?.let { map["current_user"] = it }
 
@@ -484,11 +499,6 @@ fun Route.deletePost(tokenRepository: TokenRepository, postRepository: PostRepos
         val map = mutableMapOf<String, Any>()
         handleToken(tokenRepository)?.let { map["current_user"] = it }
 
-        if (user == null) {
-            call.respond(HttpStatusCode.Unauthorized)
-            return@get
-        }
-
         val postId = call.parameters["id"]?.toLongOrNull()
 
         if (postId == null) {
@@ -500,6 +510,11 @@ fun Route.deletePost(tokenRepository: TokenRepository, postRepository: PostRepos
 
         if (post == null) {
             call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        if (!isOwner(user, feedRepository.get(post))) {
+            call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
@@ -520,11 +535,6 @@ fun Route.deleteComment(tokenRepository: TokenRepository, commentRepository: Com
         val map = mutableMapOf<String, Any>()
         handleToken(tokenRepository)?.let { map["current_user"] = it }
 
-        if (user == null) {
-            call.respond(HttpStatusCode.Unauthorized)
-            return@get
-        }
-
         val commentId = call.parameters["id"]?.toLongOrNull()
 
         if (commentId == null) {
@@ -536,6 +546,11 @@ fun Route.deleteComment(tokenRepository: TokenRepository, commentRepository: Com
 
         if (comment == null) {
             call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        if (!isOwner(user, comment)) {
+            call.respond(HttpStatusCode.Unauthorized)
             return@get
         }
 
