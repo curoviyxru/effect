@@ -31,7 +31,6 @@ fun ImageEntity.toModel() = Image(
     width = width,
     height = height,
     fileSize = fileSize,
-    creationDate = creationDate
 )
 
 interface ImageRepository : BaseRepository<Image> {
@@ -56,7 +55,6 @@ class DatabaseImageRepository : ImageRepository {
                     it.width = value.width
                     it.height = value.height
                     it.fileSize = value.fileSize
-                    it.creationDate = value.creationDate
                 }
                 ?.toModel()
         }
@@ -70,7 +68,6 @@ class DatabaseImageRepository : ImageRepository {
                     width = value.width
                     height = value.height
                     fileSize = value.fileSize
-                    creationDate = value.creationDate
                 }
                 .toModel()
         }

@@ -43,7 +43,6 @@ fun PostEntity.toModel() = Post(
     creationDate = creationDate,
     viewCount = viewCount,
     category = category,
-    lastEditDate = lastEditDate,
 )
 
 interface PostRepository : BaseRepository<Post> {
@@ -88,7 +87,6 @@ class DatabasePostRepository : PostRepository {
                     it.creationDate = value.creationDate
                     it.viewCount = value.viewCount
                     it.category = value.category
-                    it.lastEditDate = value.lastEditDate
                 }
                 ?.toModel()
         }
@@ -105,7 +103,6 @@ class DatabasePostRepository : PostRepository {
                     creationDate = value.creationDate
                     viewCount = value.viewCount
                     category = value.category
-                    lastEditDate = value.lastEditDate
                 }
                 .toModel()
         }

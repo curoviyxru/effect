@@ -34,7 +34,6 @@ fun CommentEntity.toModel() = Comment(
     image = image?.toModel(),
     post = post.toModel(),
     creationDate = creationDate,
-    lastEditDate = lastEditDate,
 )
 
 interface CommentRepository : BaseRepository<Comment> {
@@ -78,7 +77,6 @@ class DatabaseCommentRepository : CommentRepository {
                     it.image = value.image?.run { ImageEntity[id] }
                     it.post = PostEntity[value.post.id]
                     it.creationDate = value.creationDate
-                    it.lastEditDate = value.lastEditDate
                 }
                 ?.toModel()
         }
@@ -93,7 +91,6 @@ class DatabaseCommentRepository : CommentRepository {
                     image = value.image?.run { ImageEntity[id] }
                     post = PostEntity[value.post.id]
                     creationDate = value.creationDate
-                    lastEditDate = value.lastEditDate
                 }
                 .toModel()
         }

@@ -16,7 +16,6 @@ object PostsTable : LongIdTable("posts") {
     val creationDate = timestamp("creation_date")
     val viewCount = long("view_count")
     val category = varchar("category", 100).nullable()
-    val lastEditDate = timestamp("last_edit_date").nullable()
 }
 
 class PostEntity(id: EntityID<Long>) : LongEntity(id) {
@@ -29,5 +28,4 @@ class PostEntity(id: EntityID<Long>) : LongEntity(id) {
     var creationDate by PostsTable.creationDate
     var viewCount by PostsTable.viewCount
     var category by PostsTable.category
-    var lastEditDate by PostsTable.lastEditDate
 }

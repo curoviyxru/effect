@@ -24,7 +24,6 @@ data class Token(
 
 fun TokenEntity.toModel() = Token(
     user = user.toModel(),
-    expireDate = expireDate,
     accessToken = accessToken
 )
 
@@ -74,7 +73,6 @@ class DatabaseTokenRepository : TokenRepository {
                 .new {
                     this.user = user
                     creationDate = Clock.System.now()
-                    this.expireDate = expireDate
                     accessToken = generateToken(user.id.value)
                 }
                 .toModel()
