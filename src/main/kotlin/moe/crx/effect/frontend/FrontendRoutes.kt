@@ -206,6 +206,16 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
             return@get
         }
 
+        val postId = call.request.queryParameters["id"]?.toLongOrNull()
+        val post = if (postId != null) postRepository.view(postId) else null
+
+        if (post != null) {
+            map["title"] = post.title
+            map["category"] = post.category ?: ""
+            map["fullText"] = post.fullText
+            map["previewText"] = post.previewText ?: ""
+        }
+
         call.respond(ThymeleafContent("pages/create_page", map))
     }
     post("/create") {
@@ -217,6 +227,9 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
             call.respondRedirect("/login")
             return@post
         }
+
+        val postId = call.request.queryParameters["id"]?.toLongOrNull()
+        var post = if (postId != null) postRepository.view(postId) else null
 
         val multipart = call.receiveMultipart()
         val form = mutableMapOf<String, String>()
@@ -253,15 +266,27 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
                 throw IllegalArgumentException("Article text can't empty")
             }
 
-            val post = postRepository.create(Post(
-                title = title,
-                category = category,
-                fullText = fullText,
-                previewText = previewText,
-                image = image
-            ))
+            if (post == null) {
+                post = postRepository.create(Post(
+                    title = title,
+                    category = category,
+                    fullText = fullText,
+                    previewText = previewText,
+                    image = image
+                ))
 
-            feedRepository.create(user, post)
+                feedRepository.create(user, post)
+            } else {
+                post.title = title;
+                post.category = category;
+                post.fullText = fullText;
+                post.previewText = previewText;
+                post = postRepository.update(post)
+            }
+
+            if (post == null) {
+                throw Exception("Post was null")
+            }
 
             call.respondRedirect("/post/${post.id}")
         } catch (e: Exception) {
