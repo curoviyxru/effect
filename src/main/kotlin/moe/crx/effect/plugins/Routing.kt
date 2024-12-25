@@ -7,6 +7,7 @@ import io.ktor.server.routing.*
 import moe.crx.effect.frontend.loginPage
 import moe.crx.effect.frontend.commentsTable
 import moe.crx.effect.frontend.createPage
+import moe.crx.effect.frontend.deletePost
 import moe.crx.effect.frontend.editProfilePage
 import moe.crx.effect.frontend.feedsTable
 import moe.crx.effect.frontend.imagesTable
@@ -62,6 +63,7 @@ fun Application.configureFrontendRouting(userRepository: UserRepository, tokenRe
             postPage(tokenRepository, postRepository, feedRepository, commentRepository, imageRepository)
             statsPage(tokenRepository, postRepository, userRepository, commentRepository)
             editProfilePage(tokenRepository, userRepository, imageRepository)
+            deletePost(tokenRepository, postRepository, feedRepository)
 
             route("/tables") {
                 usersTable(userRepository)

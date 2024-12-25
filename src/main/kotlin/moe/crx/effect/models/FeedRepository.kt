@@ -31,6 +31,7 @@ interface FeedRepository : BaseReadOnlyRepository<Feed> {
     suspend fun count(username: String? = null, titleContains: String? = null, category: String? = null, minViews: Long? = null, maxViews: Long? = null, date: Instant? = null, textContains: String? = null): Long
     suspend fun get(post: Post): Feed
     suspend fun create(user: User, post: Post): Feed
+    suspend fun delete(post: Post)
 }
 
 class DatabaseFeedRepository : FeedRepository {
@@ -163,6 +164,16 @@ class DatabaseFeedRepository : FeedRepository {
                     this.user = UserEntity[user.id]
                     this.post = PostEntity[post.id]
                 }.toModel()
+        }
+    }
+
+    override suspend fun delete(post: Post) {
+        suspendTransaction {
+            FeedEntity
+                .find { FeedsTable.postId eq post.id }
+                .limit(1)
+                .first()
+                .delete()
         }
     }
 }

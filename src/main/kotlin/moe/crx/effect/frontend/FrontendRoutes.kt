@@ -17,6 +17,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format.char
+import moe.crx.effect.database.PostEntity
 import moe.crx.effect.models.Comment
 import moe.crx.effect.models.CommentRepository
 import moe.crx.effect.models.FeedRepository
@@ -214,6 +215,7 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
             map["category"] = post.category ?: ""
             map["fullText"] = post.fullText
             map["previewText"] = post.previewText ?: ""
+            map["isUpdate"] = true
         }
 
         call.respond(ThymeleafContent("pages/create_page", map))
@@ -257,6 +259,7 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
         map["category"] = category ?: ""
         map["fullText"] = fullText ?: ""
         map["previewText"] = previewText ?: ""
+        map["isUpdate"] = post != null
 
         try {
             if (title == null || title.isBlank()) {
@@ -473,5 +476,41 @@ fun Route.editProfilePage(tokenRepository: TokenRepository, userRepository: User
             e.message?.let { map["return_message"] = it }
             call.respond(ThymeleafContent("pages/edit_profile_page", map))
         }
+    }
+}
+
+fun Route.deletePost(tokenRepository: TokenRepository, postRepository: PostRepository, feedRepository: FeedRepository) {
+    get("/deletePost") {
+        val user = handleToken(tokenRepository)
+        val map = mutableMapOf<String, Any>()
+        handleToken(tokenRepository)?.let { map["current_user"] = it }
+
+        if (user == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
+        val postId = call.parameters["id"]?.toLongOrNull()
+
+        if (postId == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        val post = postRepository.view(postId)
+
+        if (post == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        try {
+            feedRepository.delete(post)
+            postRepository.delete(post.id)
+        } catch (e: Exception) {
+            e.message?.let { map["return_message"] = it }
+        }
+
+        call.respondRedirect("/profile")
     }
 }

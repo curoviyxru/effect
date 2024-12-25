@@ -23,6 +23,9 @@ fun Application.configureStatusPages(tokenRepository: TokenRepository) {
         status(HttpStatusCode.InternalServerError) {
             renderPage(call, Exception("Internal server error"), tokenRepository)
         }
+        status(HttpStatusCode.Unauthorized) {
+            renderPage(call, Exception("Unauthorized"), tokenRepository)
+        }
         status(HttpStatusCode.TooManyRequests) { call, status ->
             val retryAfter = call.response.headers["Retry-After"]
             call.respond(mapOf("call" to call.request.uri, "error" to "timeout", "retry_after" to (retryAfter ?: "60")))

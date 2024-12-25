@@ -18,7 +18,7 @@
 
     <div class="post-card">
         <form method="post" enctype="multipart/form-data">
-            <div class="post-title">Create a post</div>
+            <div class="post-title" th:text="${isUpdate} ? 'Update a post' : 'Create a post'"></div>
             <div>
                 <input type="text" placeholder="Title" name="title" th:value="${title}">
             </div>
@@ -32,7 +32,7 @@
                 <textarea placeholder="Preview text" name="preview_text" th:text="${previewText}"></textarea>
             </div>
             <div>
-                <input class="button" type="submit" value="Create">
+                <input class="button" type="submit" th:value="${isUpdate} ? 'Update' : 'Create'">
                 <input accept="image/*" type="file" placeholder="Banner image" name="banner_image">
             </div>
         </form>

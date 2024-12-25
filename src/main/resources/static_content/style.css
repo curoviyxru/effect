@@ -188,6 +188,7 @@ textarea, input[type=text], input[type=password] {
 .icon {
     display: flex;
     align-items: center;
+    column-gap: 4px;
 }
 
 .icon img {

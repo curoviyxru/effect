@@ -33,6 +33,8 @@
         <div class="post-meta">
             <div class="icon">
                 <!-- <img src="/static/chat.png" alt="Comment Icon"><span th:text="${comments_count}"></span> -->
+                <a th:href="'/create?id='+${feed.post.id}"><span class="button">Edit</span></a>
+                <a th:href="'/deletePost?id='+${feed.post.id}"><span class="button">Delete</span></a>
             </div>
             <div class="icon">
                 <img src="/static/visibility.png" alt="Views Icon"><span th:text="${feed.post.viewCount}"></span>
