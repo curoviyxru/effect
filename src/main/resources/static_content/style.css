@@ -220,6 +220,7 @@ textarea, input[type=text], input[type=password] {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-right: 10px;
 }
 
 .comment-info span {

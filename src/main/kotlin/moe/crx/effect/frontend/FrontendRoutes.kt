@@ -17,7 +17,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format.char
-import moe.crx.effect.database.PostEntity
 import moe.crx.effect.models.Comment
 import moe.crx.effect.models.CommentRepository
 import moe.crx.effect.models.FeedRepository
@@ -512,5 +511,40 @@ fun Route.deletePost(tokenRepository: TokenRepository, postRepository: PostRepos
         }
 
         call.respondRedirect("/profile")
+    }
+}
+
+fun Route.deleteComment(tokenRepository: TokenRepository, commentRepository: CommentRepository) {
+    get("/deleteComment") {
+        val user = handleToken(tokenRepository)
+        val map = mutableMapOf<String, Any>()
+        handleToken(tokenRepository)?.let { map["current_user"] = it }
+
+        if (user == null) {
+            call.respond(HttpStatusCode.Unauthorized)
+            return@get
+        }
+
+        val commentId = call.parameters["id"]?.toLongOrNull()
+
+        if (commentId == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        val comment = commentRepository.getById(commentId)
+
+        if (comment == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
+        }
+
+        try {
+            commentRepository.delete(comment.id)
+        } catch (e: Exception) {
+            e.message?.let { map["return_message"] = it }
+        }
+
+        call.respondRedirect("/post/${comment.post.id}")
     }
 }

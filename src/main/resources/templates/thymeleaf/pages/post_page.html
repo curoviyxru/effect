@@ -62,6 +62,7 @@
                 <span class="post-author" th:title="${comment.user.about}" th:text="${comment.user.fullName} ?: '@'+ ${comment.user.username}"></span>
                 <span class="post-date" th:text="${comment.creationDate}"></span>
             </div>
+            <a th:href="'/deleteComment?id='+${comment.id}"><span class="button">Delete</span></a>
         </div>
         <div class="comment-text" th:if="${comment.text != null}" th:text="${comment.text}"></div>
         <img th:if="${comment.image != null}" th:src="${comment.image.url}" alt="Post Image" class="comment-image">

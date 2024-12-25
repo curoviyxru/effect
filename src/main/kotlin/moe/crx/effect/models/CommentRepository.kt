@@ -41,6 +41,7 @@ interface CommentRepository : BaseRepository<Comment> {
     suspend fun count(date: Instant? = null): Long
     suspend fun get(post: Post): List<Comment>
     suspend fun count(post: Post): Long
+    suspend fun getById(id: Long): Comment?
 }
 
 class DatabaseCommentRepository : CommentRepository {
@@ -125,6 +126,14 @@ class DatabaseCommentRepository : CommentRepository {
             CommentEntity
                 .find { CommentsTable.postId eq post.id }
                 .count()
+        }
+    }
+
+    override suspend fun getById(id: Long): Comment? {
+        return suspendTransaction {
+            CommentEntity
+                .findById(id)
+                ?.toModel()
         }
     }
 }
