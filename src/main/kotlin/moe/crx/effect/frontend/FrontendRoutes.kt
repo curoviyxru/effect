@@ -105,7 +105,7 @@ suspend fun RoutingContext.renderMainPage(tokenRepository: TokenRepository, feed
     val map = mutableMapOf<String, Any>()
     handleToken(tokenRepository)?.let { map["current_user"] = it }
 
-    val query = call.request.queryParameters["query"] ?: ""
+    val query = call.request.queryParameters["query"]?.trim() ?: ""
     val parsedQuery = parseSearchQuery(query)
 
     map["query_url"] = if (!query.isBlank()) "&query=$query" else ""
@@ -288,19 +288,19 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
 
             if (post == null) {
                 post = postRepository.create(Post(
-                    title = title,
-                    category = category,
-                    fullText = fullText,
-                    previewText = previewText,
+                    title = title.trim(),
+                    category = category?.trim(),
+                    fullText = fullText.trim(),
+                    previewText = previewText?.trim(),
                     image = image
                 ))
 
                 feedRepository.create(user, post)
             } else {
-                post.title = title
-                post.category = category
-                post.fullText = fullText
-                post.previewText = previewText
+                post.title = title.trim()
+                post.category = category?.trim()
+                post.fullText = fullText.trim()
+                post.previewText = previewText?.trim()
                 image?.let { post.image = it }
                 post = postRepository.update(post)
             }
@@ -399,7 +399,7 @@ fun Route.postPage(tokenRepository: TokenRepository, postRepository: PostReposit
             }
 
             commentRepository.create(Comment(
-                text = text,
+                text = text?.trim(),
                 image = image,
                 user = user,
                 post = post
@@ -488,8 +488,8 @@ fun Route.editProfilePage(tokenRepository: TokenRepository, userRepository: User
         map["about"] = about ?: ""
 
         try {
-            user.fullName = fullName
-            user.about = about
+            user.fullName = fullName?.trim()
+            user.about = about?.trim()
             image?.let { user.image = it }
             userRepository.update(user, password)
 
