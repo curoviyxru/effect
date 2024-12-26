@@ -129,20 +129,24 @@ fun Route.logoutPage() {
 
 fun Route.loginPage(tokenRepository: TokenRepository, userRepository: UserRepository) {
     get("/login") {
-        renderLoginPage(tokenRepository)
+        renderLoginPage(tokenRepository, "")
     }
     post("/login") {
+        val form = call.receiveParameters()
+
+        val username = form["username"] ?: ""
+        val password = form["password"] ?: ""
+
         try {
-            val form = call.receiveParameters()
-
-            val username = form["username"]
-            val password = form["password"]
-
-            if (username == null || username.isBlank()) {
+            if (username.isBlank()) {
                 throw IllegalArgumentException("Username is empty.")
             }
 
-            if (password == null || password.isBlank()) {
+            if ("^[a-zA-Z0-9]+$".toRegex().matches(username).not()) {
+                throw IllegalArgumentException("Username can contain alphanumeric characters only.")
+            }
+
+            if (password.isBlank()) {
                 throw IllegalArgumentException("Password is empty.")
             }
 
@@ -158,12 +162,12 @@ fun Route.loginPage(tokenRepository: TokenRepository, userRepository: UserReposi
 
             call.respondRedirect("/profile")
         } catch (e: Exception) {
-            renderLoginPage(tokenRepository, e.message)
+            renderLoginPage(tokenRepository, username, e.message)
         }
     }
 }
 
-suspend fun RoutingContext.renderLoginPage(tokenRepository: TokenRepository, returnMessage: String? = null) {
+suspend fun RoutingContext.renderLoginPage(tokenRepository: TokenRepository, username: String, returnMessage: String? = null) {
     val user = handleToken(tokenRepository)
 
     if (user != null) {
@@ -173,6 +177,8 @@ suspend fun RoutingContext.renderLoginPage(tokenRepository: TokenRepository, ret
 
     val map = mutableMapOf<String, Any>()
     returnMessage?.let { map["return_message"] = it }
+
+    map["username"] = username;
 
     handleToken(tokenRepository)?.let { map["current_user"] = it }
     call.respond(ThymeleafContent("pages/login_page", map))
@@ -274,10 +280,10 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
 
         try {
             if (title == null || title.isBlank()) {
-                throw IllegalArgumentException("Title can't empty")
+                throw IllegalArgumentException("Title can't empty.")
             }
             if (fullText == null || fullText.isBlank()) {
-                throw IllegalArgumentException("Article text can't empty")
+                throw IllegalArgumentException("Article text can't empty.")
             }
 
             if (post == null) {
@@ -300,7 +306,7 @@ fun Route.createPage(tokenRepository: TokenRepository, postRepository: PostRepos
             }
 
             if (post == null) {
-                throw Exception("Post was null")
+                throw Exception("Post was null.")
             }
 
             call.respondRedirect("/post/${post.id}")
@@ -389,7 +395,7 @@ fun Route.postPage(tokenRepository: TokenRepository, postRepository: PostReposit
 
         try {
             if ((text == null || text.isBlank()) && image == null) {
-                throw IllegalArgumentException("Comment text and image can't be both empty")
+                throw IllegalArgumentException("Comment text and image can't be both empty.")
             }
 
             commentRepository.create(Comment(

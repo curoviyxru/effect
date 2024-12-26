@@ -18,13 +18,13 @@ fun Application.configureStatusPages(tokenRepository: TokenRepository) {
             renderPage(call, cause, tokenRepository)
         }
         status(HttpStatusCode.NotFound) {
-            renderPage(call, Exception("Page not found"), tokenRepository)
+            renderPage(call, Exception("Page not found."), tokenRepository)
         }
         status(HttpStatusCode.InternalServerError) {
-            renderPage(call, Exception("Internal server error"), tokenRepository)
+            renderPage(call, Exception("Internal server error."), tokenRepository)
         }
         status(HttpStatusCode.Unauthorized) {
-            renderPage(call, Exception("Unauthorized"), tokenRepository)
+            renderPage(call, Exception("Unauthorized."), tokenRepository)
         }
         status(HttpStatusCode.TooManyRequests) { call, status ->
             val retryAfter = call.response.headers["Retry-After"]

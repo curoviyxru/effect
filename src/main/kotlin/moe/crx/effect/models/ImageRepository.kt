@@ -87,7 +87,7 @@ class DatabaseImageRepository : ImageRepository {
         val provider = data.provider()
 
         if (provider.availableForRead > 20 * 1024 * 1024) {
-            throw IllegalArgumentException("Image is bigger than 20 MiB")
+            throw IllegalArgumentException("Image is bigger than 20 MiB.")
         }
 
         val stream = provider.toInputStream()
